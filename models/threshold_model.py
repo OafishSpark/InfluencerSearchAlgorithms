@@ -1,6 +1,5 @@
 import networkx as nx
 
-import numpy as np
 from numpy import random
 
 from copy import copy
@@ -38,23 +37,23 @@ def threshold_model(
 
 # linear threshold function (normalized)
 def ltfn(elem: str, tr_graph: nx.DiGraph, activated: list) -> float:
-  inputs = list(tr_graph.adj[elem])
-  sum_of_inps = sum([tr_graph.edges[elem, inp]['weight'] for inp in inputs])
-  if sum_of_inps == 0:
-    return 0
-  answer = 0
-  for inp in inputs:
-    if inp in activated:
-      answer += tr_graph.edges[elem, inp]['weight']
-  return answer / sum_of_inps
+    inputs = list(tr_graph.adj[elem])
+    sum_of_inps = sum([tr_graph.edges[elem, inp]["weight"] for inp in inputs])
+    if sum_of_inps == 0:
+        return 0
+    answer = 0
+    for inp in inputs:
+        if inp in activated:
+            answer += tr_graph.edges[elem, inp]["weight"]
+    return answer / sum_of_inps
 
 
 # linear threshold function for convinient usage
-def linear_threshold_model(graph: nx.DiGraph, activated: list, t_max: int = 10) -> list:
-    return threshold_model(
-        graph,
-        activated,
-        t_max,
-        dict(zip(list(graph.nodes),random.uniform(0.01, 0.99, graph.number_of_nodes()))),
-        ltfn,
-    )
+def linear_threshold_model(
+    graph: nx.DiGraph, activated: list, t_max: int = 10, theta: dict = None
+) -> list:
+    if not theta:
+        theta = dict(
+            zip(list(graph.nodes), random.uniform(0.01, 0.99, graph.number_of_nodes()))
+        )
+    return threshold_model(graph, activated, t_max, theta, ltfn)
