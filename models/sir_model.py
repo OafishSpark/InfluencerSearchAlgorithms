@@ -30,7 +30,7 @@ def sir_model(
             [infected_id if elem in infected else susceptible_id for elem in nodes],
         )
     )
-    max_weight = max([graph.edges[elem]['weight'] for elem in graph.edges])
+    max_weight = max([graph.edges[elem]["weight"] for elem in graph.edges])
     time_of_connection = dict(
         zip(
             list(graph.edges),
@@ -40,7 +40,7 @@ def sir_model(
     for t in range(t_max):
         for elem in infected:
             for sus in list(graph.adj[elem]):
-                if (t < time_of_connection[tuple([elem, sus])] and use_weights_f):
+                if t < time_of_connection[tuple([elem, sus])] and use_weights_f:
                     continue
                 if status[sus] == susceptible_id:
                     prob = random.uniform(0, 1)
