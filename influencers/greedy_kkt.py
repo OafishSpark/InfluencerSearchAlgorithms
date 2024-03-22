@@ -4,11 +4,13 @@ import numpy as np
 
 from collections.abc import Callable
 
+from models.sir_model import sir_inf_model
+
 
 def greedy_kkt(
     graph: nx.DiGraph,
-    model: Callable[[nx.DiGraph, list, int], int],
     k: int = 1,
+    model: Callable[[nx.DiGraph, list, int], int] = sir_inf_model,
     t_max: int = 3,
     rounds: int = 1,
 ) -> list:

@@ -15,16 +15,15 @@ def centrality_INF(graph: nx.DiGraph, node: str) -> float:
 
 def centrality_DC(graph: nx.DiGraph, node: str) -> float:
     deg = len(list(graph.adj[node]))
-    return sum([list(dict(graph.adj[node]).values())[i]["weight"] for i in range(deg)])
+    # return sum([list(dict(graph.adj[node]).values())[i]["weight"] for i in range(deg)])
+    return deg
 
 
 def centrality_influencers(
     graph: nx.DiGraph,
     k: int = 1,
-    centrality_rule: Callable[[nx.Graph, str], float] = centrality_INF,
+    centrality_rule: Callable[[nx.Graph, str], float] = centrality_DC,
 ) -> list:
-    n_nodes = len(list(graph.nodes))
-    node_rate = dict(zip(list(graph.nodes), [0 for i in range(n_nodes)]))
-    for elem in node_rate.keys():
-        node_rate[elem] = centrality_rule(graph, elem)
+    nodes = list(graph.nodes)
+    node_rate = dict(zip(nodes, [centrality_rule(graph, elem) for elem in nodes]))
     return sorted(node_rate)[-k:]

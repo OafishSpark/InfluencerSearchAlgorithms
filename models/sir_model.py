@@ -12,7 +12,7 @@ def sir_model(
     t_max: int = 10,
     infection_prob: dict = None,
     recover_prob: dict = None,
-    use_weights_f: bool = True,
+    use_weights_f: bool = False,
 ) -> list:
     # init stage
     susceptible_id, infected_id, recovered_id = 0, 1, 2
@@ -49,12 +49,12 @@ def sir_model(
                 prob = random.uniform(0, 1)
                 if prob > recover_prob[elem]:
                     status[elem] = recovered_id
-        infected = []
+        infecte = []
         for elem in nodes:
             if status[elem] == infected_id:
                 infected.append(elem)
         if not infected:
-            break
+            break    
     answer = []
     for elem in nodes:
         if status[elem] == susceptible_id:
@@ -66,7 +66,30 @@ def sir_model(
 
 def sir_inf_model(graph: nx.DiGraph, activated_init: list, t_max: int = 5):
     nodes = list(graph.nodes)
-    n_nodes = len(nodes)
-    infection_prob = dict(zip(nodes, [0 for i in range(n_nodes)]))
-    recover_prob = dict(zip(nodes, [1 for i in range(n_nodes)]))
-    return sir_model(graph, activated_init, t_max, infection_prob, recover_prob, False)
+    susceptible_id, infected_id, recovered_id = 0, 1, 2
+    infected = copy(activated_init)
+    status = dict(
+        zip(
+            list(graph.nodes),
+            [infected_id if elem in infected else susceptible_id for elem in nodes],
+        )
+    )
+    for _ in range(t_max):
+        for elem in infected:
+            for sus in list(graph.adj[elem]):
+                if status[sus] == susceptible_id:
+                    status[sus] = infected_id
+            status[elem] = recovered_id
+        infected = []
+        for node in nodes:
+            if status[node] == infected_id:
+                infected.append(node)
+        if not infected:
+            break
+    answer = []
+    for elem in nodes:
+        if status[elem] == susceptible_id:
+            continue
+        else:
+            answer.append(elem)
+    return answer
