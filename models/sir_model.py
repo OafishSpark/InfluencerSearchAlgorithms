@@ -12,6 +12,7 @@ def sir_model(
     t_max: int = 10,
     infection_prob: dict = None,
     recover_prob: dict = None,
+    use_weights_f: bool = True,
 ) -> list:
     # init stage
     susceptible_id, infected_id, recovered_id = 0, 1, 2
@@ -39,7 +40,7 @@ def sir_model(
     for t in range(t_max):
         for elem in infected:
             for sus in list(graph.adj[elem]):
-                if t < time_of_connection[tuple([elem, sus])]:
+                if (t < time_of_connection[tuple([elem, sus])] and use_weights_f):
                     continue
                 if status[sus] == susceptible_id:
                     prob = random.uniform(0, 1)
@@ -61,3 +62,11 @@ def sir_model(
         else:
             answer.append(elem)
     return answer
+
+
+def sir_inf_model(graph: nx.DiGraph, activated_init: list, t_max: int = 5):
+    nodes = list(graph.nodes)
+    n_nodes = len(nodes)
+    infection_prob = dict(zip(nodes, [0 for i in range(n_nodes)]))
+    recover_prob = dict(zip(nodes, [1 for i in range(n_nodes)]))
+    return sir_model(graph, activated_init, t_max, infection_prob, recover_prob, False)

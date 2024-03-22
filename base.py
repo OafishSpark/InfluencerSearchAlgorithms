@@ -1,7 +1,7 @@
 import networkx as nx
 
 from models.threshold_model import linear_threshold_model
-from models.sir_model import sir_model
+from models.sir_model import sir_model, sir_inf_model
 
 
 if __name__ == "__main__":
@@ -17,3 +17,4 @@ if __name__ == "__main__":
         result_sir += len(sir_model(graph, influencers, 5)) / n_experiments
     print(f'Result of the threshold model: {result_thrshld}')
     print(f'Result of the SIR model: {result_sir}')
+    print(f'Result of the infinite SIR model: {len(sir_inf_model(graph, influencers, 5))}')
