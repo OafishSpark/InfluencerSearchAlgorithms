@@ -3,20 +3,25 @@ import networkx as nx
 from models.threshold_model import linear_threshold_model
 from models.sir_model import sir_model, sir_inf_model
 
-from influencers.greedy_kkt import greedy_kkt
+from influencers.greedy_kkt import greedy_kkt_influencers
 from influencers.centrality import centrality_influencers
 from influencers.shapley_value import shapley_value_influencers
+
+from communities.clustering import clustering_communities
 
 
 if __name__ == "__main__":
     graph = nx.read_edgelist(
         "./congress_network/congress.edgelist", create_using=nx.DiGraph()
     )
+    communities = clustering_communities(graph, 2)
+    print(len(communities))
+    print([len(elem) for elem in communities])
     # influencers = greedy_kkt(graph, 10)
-    # influencers = centrality_influencers(graph, 10)
-    influencers = shapley_value_influencers(graph, 10)
+    influencers = centrality_influencers(graph, 100)
+    # influencers = shapley_value_influencers(graph, 10)
     result_thrshld, result_sir = 0, 0
-    n_experiments = 100
+    n_experiments = 10
     for i in range(n_experiments):
         result_thrshld += (
             len(linear_threshold_model(graph, influencers, 10)) / n_experiments

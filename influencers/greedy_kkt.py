@@ -7,7 +7,7 @@ from collections.abc import Callable
 from models.sir_model import sir_inf_model
 
 
-def greedy_kkt(
+def greedy_kkt_influencers(
     graph: nx.DiGraph,
     k: int = 1,
     model: Callable[[nx.DiGraph, list, int], int] = sir_inf_model,
