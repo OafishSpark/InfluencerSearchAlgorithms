@@ -1,9 +1,7 @@
 import networkx as nx
 
-import numpy as np
-
 from collections.abc import Callable
-from itertools import combinations, groupby
+from itertools import combinations
 
 
 def topological_distance(
