@@ -37,7 +37,7 @@ def single_linkage_dist(
 
 def clustering_communities(
     graph: nx.DiGraph,
-    k: int = 2,
+    communities_count: int = 2,
     dist_nodes: Callable[[nx.Graph, tuple], float] = topological_distance,
     dist_clusters: Callable[[dict, tuple], float] = single_linkage_dist,
 ) -> list:
@@ -49,7 +49,7 @@ def clustering_communities(
             [dist_nodes(graph, elem) for elem in combinations(nodes, 2)],
         )
     )
-    for _ in range(0, len(nodes) - k):
+    for _ in range(0, len(nodes) - communities_count):
         first, second = min(
             [elem for elem in combinations(clusters, 2)],
             key=lambda x: dist_clusters(dist_matrix, x),

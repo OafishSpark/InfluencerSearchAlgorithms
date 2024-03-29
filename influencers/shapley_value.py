@@ -10,7 +10,7 @@ from models.sir_model import sir_inf_model
 
 def shapley_value_influencers(
     graph: nx.DiGraph,
-    k: int = 1,
+    influencers_count: int = 1,
     model: Callable[[nx.DiGraph, list, int], int] = sir_inf_model,
     t_max: int = 10,
     rounds: int = 1,
@@ -36,7 +36,7 @@ def shapley_value_influencers(
                 )
                 / n_permutations
             )
-    influencers = ['' for i in range(k)]
+    influencers = ['' for i in range(influencers_count)]
     n_influencers = 0
     for node in sorted(rates):
         for infl in influencers[:n_influencers]:
@@ -44,6 +44,6 @@ def shapley_value_influencers(
                 continue
         influencers[n_influencers] = node
         n_influencers += 1
-        if n_influencers == k:
+        if n_influencers == influencers_count:
             break 
     return influencers

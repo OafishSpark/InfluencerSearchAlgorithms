@@ -9,15 +9,15 @@ from models.sir_model import sir_inf_model
 
 def greedy_kkt_influencers(
     graph: nx.DiGraph,
-    k: int = 1,
+    influencers_count: int = 1,
     model: Callable[[nx.DiGraph, list, int], int] = sir_inf_model,
     t_max: int = 3,
     rounds: int = 1,
 ) -> list:
-    assert k < len(graph.nodes)
+    assert influencers_count < len(graph.nodes)
     influencers = []
     others = list(graph.nodes())
-    for i in range(k):
+    for i in range(influencers_count):
         max_estimation = 0
         best_node = ""
         for node in others:

@@ -25,11 +25,11 @@ def community_diversity(
 
 def csr_influencers(
     graph: nx.DiGraph,
-    k: int = 1,
+    influencers_count: int = 1,
     communities_l: list = None,
 ) -> list:
     if not communities_l:
-        communities_l = clustering_communities(graph, k)
+        communities_l = clustering_communities(graph, influencers_count)
     n_communities = len(communities_l)
     nodes = list(graph.nodes)
     n_nodes = len(nodes)
@@ -46,4 +46,4 @@ def csr_influencers(
             nx.subgraph(graph, communities_l[communities_d[node]])
         ) / nx.density(graph)
         node_rate[node] = deg * (1 + modularity * diversity * density)
-    return sorted(node_rate)[:k]
+    return sorted(node_rate)[:influencers_count]

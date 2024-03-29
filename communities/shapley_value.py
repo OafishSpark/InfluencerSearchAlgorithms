@@ -8,11 +8,12 @@ from itertools import combinations
 
 from models.sir_model import sir_inf_model
 from communities.clustering import topological_distance, single_linkage_dist
+from influencers.shapley_value import shapley_value_influencers
 
 
 def shapley_value_communities(
     graph: nx.DiGraph,
-    k: int = 1,
+    communities_count: int = 1,
     model: Callable[[nx.DiGraph, list, int], int] = sir_inf_model,
     t_max: int = 10,
     rounds: int = 1,
@@ -21,27 +22,10 @@ def shapley_value_communities(
     dist_nodes: Callable[[nx.Graph, tuple], float] = topological_distance,
     dist_clusters: Callable[[dict, tuple], float] = single_linkage_dist,
 ) -> list:
-    nodes = graph.nodes
+    nodes = list(graph.nodes)
     n_nodes = len(nodes)
-    if not permutations:
-        permutations = [list(random.permutation(nodes)) for _ in range(n_permutations)]
-    rates = dict(zip(nodes, [0.0 for i in range(n_nodes)]))
-    for p in permutations:
-        for node in nodes:
-            rates[node] += (
-                np.mean(
-                    np.array(
-                        [
-                            len(model(graph, p[: p.index(node) + 1], t_max))
-                            - len(model(graph, p[: p.index(node)], t_max))
-                            for _ in range(rounds)
-                        ]
-                    )
-                )
-                / n_permutations
-            )
-    sorted_nodes = sorted(rates)
-    influencers = ["" for i in range(k)]
+    sorted_nodes = shapley_value_influencers(graph, n_nodes, model, t_max, rounds, n_permutations, permutations)
+    influencers = ["" for i in range(communities_count)]
     n_influencers = 0
     for node in sorted_nodes:
         for infl in influencers[:n_influencers]:
@@ -50,7 +34,7 @@ def shapley_value_communities(
         influencers[n_influencers] = node
         sorted_nodes.remove(node)
         n_influencers += 1
-        if n_influencers == k:
+        if n_influencers == communities_count:
             break
     clusters = [[elem] for elem in influencers]
     dist_matrix = dict(

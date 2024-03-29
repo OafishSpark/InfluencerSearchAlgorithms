@@ -21,9 +21,9 @@ def centrality_DC(graph: nx.DiGraph, node: str) -> float:
 
 def centrality_influencers(
     graph: nx.DiGraph,
-    k: int = 1,
+    influencers_count: int = 1,
     centrality_rule: Callable[[nx.Graph, str], float] = centrality_DC,
 ) -> list:
     nodes = list(graph.nodes)
     node_rate = dict(zip(nodes, [centrality_rule(graph, elem) for elem in nodes]))
-    return sorted(node_rate)[-k:]
+    return sorted(node_rate)[-influencers_count:]
