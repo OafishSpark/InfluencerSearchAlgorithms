@@ -36,4 +36,14 @@ def shapley_value_influencers(
                 )
                 / n_permutations
             )
-    return sorted(rates)[-k:]
+    influencers = ['' for i in range(k)]
+    n_influencers = 0
+    for node in sorted(rates):
+        for infl in influencers[:n_influencers]:
+            if node in list(graph.adj[infl]):
+                continue
+        influencers[n_influencers] = node
+        n_influencers += 1
+        if n_influencers == k:
+            break 
+    return influencers

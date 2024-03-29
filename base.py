@@ -9,6 +9,7 @@ from influencers.shapley_value import shapley_value_influencers
 from influencers.csr import csr_influencers
 
 from communities.clustering import clustering_communities
+from communities.shapley_value import shapley_value_communities
 
 
 if __name__ == "__main__":
@@ -17,8 +18,8 @@ if __name__ == "__main__":
     )
     # influencers = greedy_kkt(graph, 10)
     # influencers = centrality_influencers(graph, 100)
-    # influencers = shapley_value_influencers(graph, 10)
-    influencers = csr_influencers(graph, 10)
+    # influencers = shapley_value_influencers(graph, 100)
+    influencers = csr_influencers(graph, 100, shapley_value_communities(graph, 10))
     result_thrshld, result_sir = 0, 0
     n_experiments = 10
     for i in range(n_experiments):

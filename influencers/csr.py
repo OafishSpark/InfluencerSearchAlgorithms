@@ -2,20 +2,24 @@ import networkx as nx
 
 from numpy import log2
 
-from communities.clustering import clustering_communities 
+from communities.clustering import clustering_communities
 
 
-def community_diversity(graph: nx.graph, node: str, comm_l: list, comm_d: dict) -> float:
+def community_diversity(
+    graph: nx.graph, node: str, comm_l: list, comm_d: dict
+) -> float:
     answer = 0
     for comm in comm_l:
-        k1 = sum([graph.edges[node, elem]['weight']
-                   for elem in list(graph.adj[node])])
-        k2 = sum([graph.edges[node, elem]['weight'] 
-                  if elem in graph.adj[node]
-                    else 0 for elem in comm])
+        k1 = sum([graph.edges[node, elem]["weight"] for elem in list(graph.adj[node])])
+        k2 = sum(
+            [
+                graph.edges[node, elem]["weight"] if elem in graph.adj[node] else 0
+                for elem in comm
+            ]
+        )
         if k1 < 10e-3 or k2 < 10e-6:
             continue
-        answer += k2 / k1 * log2(k2 / k1) 
+        answer += k2 / k1 * log2(k2 / k1)
     return answer
 
 
@@ -38,6 +42,8 @@ def csr_influencers(
         deg = len(graph.adj[node])
         modularity = len(communities_l[communities_d[node]]) / n_nodes
         diversity = community_diversity(graph, node, communities_l, communities_d)
-        density = nx.density(nx.subgraph(graph, communities_l[communities_d[node]])) / nx.density(graph)
+        density = nx.density(
+            nx.subgraph(graph, communities_l[communities_d[node]])
+        ) / nx.density(graph)
         node_rate[node] = deg * (1 + modularity * diversity * density)
     return sorted(node_rate)[:k]
