@@ -1,8 +1,5 @@
 import networkx as nx
 
-import numpy as np
-from numpy import random
-
 from collections.abc import Callable
 from itertools import combinations
 
@@ -36,7 +33,7 @@ def shapley_value_communities(
         n_influencers += 1
         if n_influencers == communities_count:
             break
-    clusters = [[elem] for elem in influencers]
+    communities = [[elem] for elem in influencers]
     dist_matrix = dict(
         zip(
             [elem for elem in combinations(nodes, 2)],
@@ -44,7 +41,7 @@ def shapley_value_communities(
         )
     )
     for node in sorted_nodes:
-        (min(clusters, key=lambda x: single_linkage_dist(dist_matrix, (x, [node])))).append(
+        (min(communities, key=lambda x: dist_clusters(dist_matrix, (x, [node])))).append(
             node
         )
-    return clusters
+    return communities

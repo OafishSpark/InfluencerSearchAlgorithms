@@ -26,4 +26,4 @@ def centrality_influencers(
 ) -> list:
     nodes = list(graph.nodes)
     node_rate = dict(zip(nodes, [centrality_rule(graph, elem) for elem in nodes]))
-    return sorted(node_rate)[-influencers_count:]
+    return sorted(node_rate, key=lambda x: node_rate[x])[-influencers_count:]

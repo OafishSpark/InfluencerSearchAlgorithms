@@ -38,7 +38,7 @@ def shapley_value_influencers(
             )
     influencers = ['' for i in range(influencers_count)]
     n_influencers = 0
-    for node in sorted(rates):
+    for node in sorted(rates, key=lambda x: rates[x]):
         for infl in influencers[:n_influencers]:
             if node in list(graph.adj[infl]):
                 continue
