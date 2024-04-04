@@ -35,7 +35,7 @@ def scc_kosarajus(graph: nx.DiGraph) -> list:
     # create the transposed graph
     nodes = list(graph.nodes)
     n_nodes = len(graph)
-    graph_tr = graph.reverse()
+    graph_tr = graph.reverse(False)
     # create the topologically sorted list of vertices
     vertice_queue = topological_sort(graph)
     vertice_queue.reverse()
@@ -63,7 +63,7 @@ def scc_kosarajus(graph: nx.DiGraph) -> list:
 def strongly_components_purdom(graph: nx.DiGraph, n_components: int = None) -> tuple:
     nodes = list(graph.nodes)
     n_nodes = len(nodes)
-    graph_tr = graph.reverse()
+    graph_tr = graph.reverse(False)
     sc_components = scc_kosarajus(graph)
     if n_components:
         new_graph = graph.copy()
