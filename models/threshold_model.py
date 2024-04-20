@@ -15,7 +15,7 @@ def threshold_model(
     theta: dict,
     threshold_function: Callable[[str, nx.DiGraph, list], float],
 ) -> list:
-    tr_graph = graph.reverse()
+    tr_graph = graph.reverse(False)
     activated = copy(activated_init)
     not_activated = []
     for elem in list(graph.nodes):
