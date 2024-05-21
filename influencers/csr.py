@@ -54,4 +54,4 @@ def csr_influencers(
     if not communities_l:
         communities_l = clustering_communities(graph, influencers_count)
     node_rate = csr_rank_nodes(graph, communities_l)
-    return sorted(node_rate, key=lambda x: node_rate[x])[:influencers_count]
+    return sorted(node_rate, key=lambda x: -node_rate[x])[:influencers_count]
