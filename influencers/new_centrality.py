@@ -6,7 +6,7 @@ import numpy as np
 def new_centrality(graph: nx.DiGraph) -> dict:
     nodes = list(graph.nodes)
     nodes_num = [i for i in range(len(nodes))]
-    node_rates = dict(zip(
+    node_num_rates = dict(zip(
         nodes_num,
         [0 for _ in nodes]
     ))
@@ -26,10 +26,14 @@ def new_centrality(graph: nx.DiGraph) -> dict:
         if best_node == -1:
             break
         tr_clsr_row_set = np.logical_or(tr_clsr_row_set, transitive_closure[best_node]).astype(int)
-        node_rates[best_node] = best_rate
+        node_num_rates[best_node] = best_rate
         set_rate += best_rate
         set.append(best_node)
         nodes_num.remove(best_node)
+    node_rates = dict(zip(
+        nodes,
+        [node_num_rates[i] for i in range(len(nodes))]
+    ))
     return node_rates
 
 

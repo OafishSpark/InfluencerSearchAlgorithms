@@ -62,9 +62,10 @@ def new_communities(
     if not n_communities:
         try:
             scores = []
-            for n in range(2, int(ceil(graph.number_of_nodes() ** (1 / 2)))):
+            for n in range(2, int(ceil(graph.number_of_nodes() ** (1 / 1.5)))):
                 communities = detect_communities(graph, n, closure_prob_matrix)
                 scores += [community_detection_value(communities, closure_prob_matrix)]
+            print(scores)
             n_communities = 2 + max(
                 [i for i in range(len(scores))], key=lambda x: scores[x]
             )
